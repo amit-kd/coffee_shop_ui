@@ -1,0 +1,96 @@
+<div class="card">
+  <div class="col-xs-12 col-md-12 form-group text-right submit-cart" *ngIf="!isEditable">
+    <ol class="progtrckr" data-progtrckr-steps="4">
+      <li [ngClass]="{'progtrckr-done':orderStatuses[orderStatus] >= 2, 'progtrckr-todo':orderStatuses[orderStatus] < 2}">Confirming</li>
+      <!--
+     -->
+      <li [ngClass]="{'progtrckr-done':orderStatuses[orderStatus] >= 3, 'progtrckr-todo':orderStatuses[orderStatus] < 3}">Preparing</li>
+      <!--
+     -->
+      <li [ngClass]="{'progtrckr-done':orderStatuses[orderStatus] >= 4, 'progtrckr-todo':orderStatuses[orderStatus] < 4}">Out for delivery</li>
+      <!--
+     -->
+      <li [ngClass]="{'progtrckr-done':orderStatuses[orderStatus] == 5, 'progtrckr-todo':orderStatuses[orderStatus] < 5}">Delivered</li>
+    </ol>
+  </div>
+  <table class="table table-hover shopping-cart-wrap">
+    <thead class="text-muted">
+      <tr>
+        <th scope="col">Product</th>
+        <th scope="col" width="120">Quantity</th>
+        <th scope="col" width="120">Price</th>
+        <th scope="col" width="200" class="text-right">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of productDetails">
+        <td>
+          <figure class="media">
+            <div class="img-wrap">
+              <img [src]="item.privewImages[0]" class="img-thumbnail img-sm">
+            </div>
+            <figcaption class="media-body">
+              <a href="javascript:void(0);" (click)="gotoProductDetails(item)">
+                <h6 class="title text-truncate" (click)="gotoProductDetails(item)">{{item.title}}</h6>
+              </a>
+            </figcaption>
+          </figure>
+        </td>
+        <td>
+          <select class="form-control" [(ngModel)]="item.quantity" [disabled]="item.isAddedToCart || !isEditable">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+          </select>
+        </td>
+        <td>
+          <div class="price-wrap">
+            <var class="price">Rs. {{item.quantity*item.currentPrice}}</var>
+            <small class="text-muted">(Rs. {{item.currentPrice}} each)</small>
+          </div>
+          <!-- price-wrap .// -->
+        </td>
+        <td class="text-right">
+          <a *ngIf="!item.isAddedToCart && isEditable" href="javascript:void(0);" class="btn btn-outline-success" data-toggle="tooltip"
+            data-original-title="Save to Wishlist" (click)="onCartUpdate(item)">
+            <i class="fa fa-cart-plus"></i> Add to cart
+          </a>
+          <a *ngIf="item.isAddedToCart && isEditable" href="javascript:void(0);" class="btn btn-outline-danger" (click)="onCartUpdate(item)">
+            × Remove</a>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" class="text-right">
+          <span>
+            <b>Total:</b>
+          </span>
+        </td>
+        <td colspan="2">
+          <div class="price-wrap">
+            <var class="price">Rs. {{total}}</var>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="container">
+    <form class="row">
+      <div class="col-xs-6 col-md-6 form-group">
+        <label>Order date &amp; time</label>
+        <span>
+          <input type="date" name="orderdate" id="dob" class="order form-control" placeholder="order date" [disabled]="!isEditable">
+          <input type="time" name="ordertime" id="dob" class="order form-control" placeholder="order time" [disabled]="!isEditable">
+        </span>
+      </div>
+      <div class="col-xs-6 col-md-6 form-group text-right submit-cart" *ngIf="isEditable">
+        <button class="btn btn-outline-success">
+          <i class="fa fa-save"></i>&nbsp;Save
+        </button>
+        <button class="btn btn-outline-success">
+          <i class="fa fa-check-circle"></i>&nbsp;Submit</button>
+      </div>
+    </form>
+  </div>
+</div>
+<!-- card.// -->

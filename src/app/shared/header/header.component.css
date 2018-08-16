@@ -1,0 +1,19 @@
+header{
+    min-height: 3.5em;
+}
+.cart-items-count{
+    position:relative;
+    display:flex;
+    text-align:center;
+    justify-content: center;
+    top:-1.7em;
+}
+.notification-counter {   
+    position: absolute;
+    left: 1.2em;
+    background-color: rgba(212, 19, 13, 1);
+    color: #fff;
+    border-radius: 3px;
+    padding: 1px 3px;
+    font: 8px Verdana;
+}

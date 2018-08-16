@@ -1,0 +1,32 @@
+<div class="container">
+  <div class="row">
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Order Id</th>
+            <th>Products</th>
+            <th>Date &amp; Time</th>
+            <th>Total</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let order of orderDetails">
+            <td>
+              <a href="javascript:void(0);" (click)="openOrder(order)">{{order.id}}</a>
+            </td>
+            <td>
+              {{order.products}}
+            </td>
+            <td>{{order.date}} &amp; {{order.time}}</td>
+            <td>Rs. {{order.total}}</td>
+            <td>
+              <span class="label label-info">{{order.status}}</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
