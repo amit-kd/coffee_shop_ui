@@ -1,18 +1,17 @@
-<alert *ngIf="message" [type]="messageType" dismissOnTimeout="5000" dismissible="true">
+<alert *ngIf="message" [type]="messageType" [dismissOnTimeout]="alertDismiss" dismissible="true">
   {{message}}
 </alert>
 <div class="card">
-  <div class="col-xs-12 col-md-12 form-group text-right submit-cart" *ngIf="!isEditable">
-    <ol class="progtrckr" data-progtrckr-steps="4">
+  <div class="col-xs-12 col-md-12 form-group text-right submit-cart" *ngIf="isOrderDetails || sharedService.getEditedOrder().id">
+    <ol class="progtrckr" data-progtrckr-steps="5">
+      <li [ngClass]="{'progtrckr-done':orderStatuses[orderStatus] >= 1, 'progtrckr-todo':orderStatuses[orderStatus] < 1}">Saved</li>
+
       <li [ngClass]="{'progtrckr-done':orderStatuses[orderStatus] >= 2, 'progtrckr-todo':orderStatuses[orderStatus] < 2}">Confirming</li>
-      <!--
-     -->
+
       <li [ngClass]="{'progtrckr-done':orderStatuses[orderStatus] >= 3, 'progtrckr-todo':orderStatuses[orderStatus] < 3}">Preparing</li>
-      <!--
-     -->
+
       <li [ngClass]="{'progtrckr-done':orderStatuses[orderStatus] >= 4, 'progtrckr-todo':orderStatuses[orderStatus] < 4}">Out for delivery</li>
-      <!--
-     -->
+
       <li [ngClass]="{'progtrckr-done':orderStatuses[orderStatus] == 5, 'progtrckr-todo':orderStatuses[orderStatus] < 5}">Delivered</li>
     </ol>
   </div>
@@ -34,20 +33,23 @@
             </div>
             <figcaption class="media-body">
               <a href="javascript:void(0);" (click)="gotoProductDetails(item)">
-                <h6 class="title text-truncate" (click)="gotoProductDetails(item)">{{item.title}}</h6>
+                <span class="title text-truncate" (click)="gotoProductDetails(item)">{{item.title}}</span>
               </a>
-              <dl *ngIf="item.stockCount <= item.thresholdStockCount" class="param param-inline small">
+              <dl *ngIf="item.stockCount === 0" class="param param-inline small out-of-stock">
+                <dd>Out of stock!</dd>
+              </dl>
+              <dl *ngIf="item.stockCount <= item.thresholdStockCount && item.stockCount !== 0" class="param param-inline small">
                 <dd>Hurry! Only {{item.stockCount>1?item.stockCount +' are': item.stockCount + ' is'}} left!</dd>
               </dl>
             </figcaption>
           </figure>
         </td>
         <td>
-          <select class="form-control" [(ngModel)]="item.quantity" [disabled]="item.isAddedToCart || !isEditable">
-            <option>1</option>
-            <option *ngIf="item.stockCount >=2">2</option>
-            <option *ngIf="item.stockCount >=3">3</option>
-            <option *ngIf="item.stockCount >=4">4</option>
+          <select class="form-control" [(ngModel)]="item.quantity" [disabled]="item.isAddedToCart || !isEditable || item.stockCount===0">
+            <option [ngValue]="1">1</option>
+            <option [ngValue]="2" *ngIf="item.stockCount >=2">2</option>
+            <option [ngValue]="3" *ngIf="item.stockCount >=3">3</option>
+            <option [ngValue]="4" *ngIf="item.stockCount >=4">4</option>
           </select>
         </td>
         <td>
@@ -58,11 +60,12 @@
           <!-- price-wrap .// -->
         </td>
         <td class="text-right">
-          <a *ngIf="!item.isAddedToCart && isEditable" href="javascript:void(0);" class="btn btn-outline-success" data-toggle="tooltip"
-            data-original-title="Save to Wishlist" (click)="onCartUpdate(item)">
+          <a *ngIf="!item.isAddedToCart && isEditable && item.stockCount !== 0" href="javascript:void(0);" class="btn btn-outline-success"
+            data-toggle="tooltip" data-original-title="Save to Wishlist" (click)="onCartUpdate(item)">
             <i class="fa fa-cart-plus"></i> Add to cart
           </a>
-          <a *ngIf="item.isAddedToCart && isEditable" href="javascript:void(0);" class="btn btn-outline-danger" (click)="onCartUpdate(item)">
+          <a *ngIf="item.isAddedToCart && isEditable && item.stockCount !== 0" href="javascript:void(0);" class="btn btn-outline-danger"
+            (click)="onCartUpdate(item)">
             × Remove</a>
         </td>
       </tr>
@@ -80,7 +83,7 @@
       </tr>
     </tbody>
   </table>
-  <div class="container" *ngIf="sharedService && sharedService.getUser().isLogged">
+  <div *ngIf="sharedService && sharedService.getUser().isLogged">
     <form class="row">
       <div class="col-xs-6 col-md-6 form-group">
         <label>Order date &amp; time</label>

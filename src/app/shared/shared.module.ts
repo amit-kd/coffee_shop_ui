@@ -6,7 +6,7 @@ import { CarouselModule, CollapseModule, ModalModule, AlertModule } from 'ngx-bo
 import { FooterComponent } from './footer/footer.component';
 import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
-import { FormsModule } from '../../../node_modules/@angular/forms';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [

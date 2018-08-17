@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { SharedService } from './shared/shared.service';
-import { Router, NavigationEnd } from '../../node_modules/@angular/router';
-import { filter } from '../../node_modules/rxjs/operators';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -15,6 +15,8 @@ export class AppComponent {
       filter(event => event instanceof NavigationEnd)
     ).subscribe(() => {
       this.sharedService.refreshUserInfo();
+      this.sharedService.refreshCart();
+      this.sharedService.refreshEditedOrder();
     });
 
   }

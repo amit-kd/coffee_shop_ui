@@ -1,0 +1,4 @@
+export enum REQ_TYPE {
+    AUTHORIZED,
+    UNAUTHORIZED
+}

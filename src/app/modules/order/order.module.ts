@@ -1,13 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { OrderHistoryComponent } from './order-history/order-history.component';
-import { FormsModule } from '../../../../node_modules/@angular/forms';
+import { FormsModule } from '@angular/forms';
+import { AlertModule } from 'ngx-bootstrap';
+import { OrderService } from './order.service';
 
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule, AlertModule.forRoot()
   ],
-  declarations: [OrderHistoryComponent]
-
+  declarations: [OrderHistoryComponent],
+  providers: [OrderService]
 })
 export class OrderModule { }

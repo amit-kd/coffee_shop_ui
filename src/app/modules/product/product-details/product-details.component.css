@@ -174,5 +174,7 @@ button.add-to-cart:disabled:hover,button.like:disabled:hover{
     opacity: 1;
     -webkit-transform: scale(1);
             transform: scale(1); } }
-
+.stock-quote{
+  color:red;
+}
 /*# sourceMappingURL=style.css.map */

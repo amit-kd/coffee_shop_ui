@@ -1,3 +1,6 @@
+<alert *ngIf="message" [type]="messageType" [dismissOnTimeout]="alertDismiss" dismissible="true">
+  {{message}}
+</alert>
 <div class="container">
   <div class="card">
     <div class="container-fliud">
@@ -33,10 +36,20 @@
             <strong>{{productDetails.enjoyedPercentage}}%</strong> of buyers enjoyed this product!
             <strong>({{productDetails.noOfVotes}} votes)</strong>
           </p>
+          <div class="stock-quote" *ngIf="productDetails.stockCount === 0">
+            <span>Out of stock!
+            </span>
+          </div>
+          <div class="stock-quote" *ngIf="productDetails.stockCount <= productDetails.thresholdStockCount  && productDetails.stockCount !== 0 ">
+            <span>Hurry! Only {{productDetails.stockCount>1?productDetails.stockCount +' are': productDetails.stockCount + ' is'}}
+              left!
+            </span>
+          </div>
           <div class="action">
-            <button class="btn btn-outline-success" type="button">
+            <button class="btn btn-outline-success" type="button" (click)="onCartUpdate()" [disabled]="cartDisable()" [title]="cartDisableMessage">
               <span class="fa fa-cart-plus"> </span>Add to cart</button>
-            <button class="btn btn-outline-success" type="button" [disabled]="productDetails.isLiked">
+            <button class="btn" [class.btn-outline-success]="!productDetails.isLiked" [class.btn-outline-danger]="productDetails.isLiked"
+              type="button" [disabled]="likeDisableMessage" [title]="likeDisableMessage" (click)="likeProduct()">
               <span class="fa fa-heart"> </span>
             </button>
           </div>

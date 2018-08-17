@@ -42,7 +42,7 @@
               <a class="nav-link shopping-cart" href="javascript:void(0);" (click)="gotoCarts()">
                 <span class="fa fa-shopping-cart"></span>
                 <span class="cart-items-count">
-                  <span class=" notification-counter">{{sharedService && sharedService.cartItems.length}}</span>
+                  <span class=" notification-counter">{{sharedService && sharedService.getCartSize()}}</span>
                 </span>
               </a>
             </li>

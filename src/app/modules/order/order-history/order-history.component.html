@@ -1,3 +1,6 @@
+<alert *ngIf="message" [type]="messageType" dismissOnTimeout="5000" dismissible="true">
+  {{message}}
+</alert>
 <div class="container">
   <div class="row">
     <div class="table-responsive">
@@ -17,12 +20,12 @@
               <a href="javascript:void(0);" (click)="openOrder(order)">{{order.id}}</a>
             </td>
             <td>
-              {{order.products}}
+              {{order.productNames.join()}}
             </td>
             <td>{{order.date}} &amp; {{order.time}}</td>
             <td>Rs. {{order.total}}</td>
             <td>
-              <span class="label label-info">{{order.status}}</span>
+              <span class="label label-info">{{orderStatuses[order.status]}}</span>
             </td>
           </tr>
         </tbody>

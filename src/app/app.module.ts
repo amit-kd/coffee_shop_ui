@@ -7,9 +7,10 @@ import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
 import { HomeModule } from './modules/home/home.module';
 import { AppRoutingModule } from './app-routing/app-routing.module';
-import { FormsModule } from '../../node_modules/@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { ProductModule } from './modules/product/product.module';
 import { OrderModule } from './modules/order/order.module';
+import { JwtInterceptor } from './core/authnication/http-interceptor';
 
 @NgModule({
   declarations: [

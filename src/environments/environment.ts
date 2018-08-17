@@ -11,7 +11,8 @@ export const environment = {
   tokenUrl: host + '/oauth/token',
   loginUrl: baseUrl + '/user/login',
   signupUrl: baseUrl + '/register',
-  productUrl: baseUrl + '/products'
+  productUrl: baseUrl + '/products',
+  orderUrl: baseUrl + '/user/orders'
 };
 
 /*

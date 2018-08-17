@@ -20,6 +20,11 @@
     vertical-align: baseline;
     color: red;
 } 
+.param dd.out-of-stock {
+    margin: 0;
+    vertical-align: baseline;
+    color:black;
+} 
 
 .shopping-cart-wrap .price {
     color: #007bff;
@@ -50,6 +55,7 @@ input.order.form-control{
 }
 .media-body a{
     color: black;
+    font-weight: 500;
 }
 
 ol.progtrckr {

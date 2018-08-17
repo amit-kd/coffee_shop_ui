@@ -4,8 +4,8 @@ import { SignupComponent } from '../signup/signup.component';
 import { SharedService } from '../shared.service';
 import { SignUPDTO } from '../../models/signup.dto';
 import { LOGIN_MANDATORY_FIELDS, NETWORK_FAILED } from '../shared.properties';
-import { Router, ActivatedRoute } from '../../../../node_modules/@angular/router';
-import { NgForm } from '../../../../node_modules/@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
+import { NgForm } from '@angular/forms';
 
 
 @Component({

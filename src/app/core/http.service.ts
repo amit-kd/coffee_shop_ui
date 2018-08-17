@@ -13,8 +13,8 @@ import {
 import { AngularReduxRequestOptions } from './angular-redux-request.options';
 
 import { LoaderService } from './loader/loader.service';
-import { Observable } from '../../../node_modules/rxjs';
-import { throwError } from '../../../node_modules/rxjs';
+import { Observable } from 'rxjs';
+import { throwError } from 'rxjs';
 import { catchError, tap, finalize, map } from 'rxjs/operators';
 
 @Injectable()

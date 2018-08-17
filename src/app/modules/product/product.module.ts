@@ -2,9 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProductListingComponent } from './product-listing/product-listing.component';
 import { ProductDetailsComponent } from './product-details/product-details.component';
-import { FormsModule } from '../../../../node_modules/@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { ProductService } from './product.service';
-import { AlertModule } from '../../../../node_modules/ngx-bootstrap';
+import { AlertModule } from 'ngx-bootstrap';
 
 @NgModule({
   imports: [
