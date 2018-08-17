@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { WelcomeComponent } from '../modules/home/welcome/welcome.component';
-import { ProductDetailsComponent } from '../modules/home/product-details/product-details.component';
-import { ProductListingComponent } from '../modules/home/product-listing/product-listing.component';
-import { OrderHistoryComponent } from '../modules/home/order-history/order-history.component';
+import { OrderHistoryComponent } from '../modules/order/order-history/order-history.component';
+import { ProductDetailsComponent } from '../modules/product/product-details/product-details.component';
+import { ProductListingComponent } from '../modules/product/product-listing/product-listing.component';
+import { AuthGuard } from '../core/authnication/auth-guard';
 
 
 const routes: Routes = [
@@ -12,11 +13,13 @@ const routes: Routes = [
   { path: 'product/:productId', component: ProductDetailsComponent },
   { path: 'products', component: ProductListingComponent },
   { path: 'order/:orderId', component: ProductListingComponent },
-  { path: 'orders', component: OrderHistoryComponent }
+  { path: 'orders', component: OrderHistoryComponent, canActivate: [AuthGuard] }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: [AuthGuard]
 })
+
 export class AppRoutingModule { }

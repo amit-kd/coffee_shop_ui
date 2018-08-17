@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SharedService } from '../../../shared/shared.service';
 
 @Component({
   selector: 'app-product-details',
@@ -8,7 +9,9 @@ import { Component, OnInit } from '@angular/core';
 export class ProductDetailsComponent implements OnInit {
   public productDetails: Object;
   public selectedImage: number = 0;
-  constructor() { }
+  constructor(public sharedService: SharedService) {
+
+  }
 
   ngOnInit() {
     this.productDetails = {

@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '../../../../../node_modules/@angular/router';
+import { SharedService } from '../../../shared/shared.service';
+import { SignUPDTO } from '../../../models/signup.dto';
+import { ProductService } from '../product.service';
+import { NETWORK_FAILED } from '../../../shared/shared.properties';
 
 @Component({
   selector: 'app-product-listing',
@@ -14,9 +18,18 @@ export class ProductListingComponent implements OnInit {
   public orderStatus: string = 'DELIVERED';
   public orderId: number;
   private sub: any;
-  constructor(private router: Router, private route: ActivatedRoute) { }
+  public message: String;
+  public messageType: String = "danger";
+
+  constructor(private router: Router, private route: ActivatedRoute, public sharedService: SharedService, private productService: ProductService) {
+
+  }
 
   ngOnInit() {
+    this.productService.getProducts().subscribe((data) => this.onSuccess(data),
+      (error) => this.handleError(error));
+
+
     this.sub = this.route.params.subscribe(params => {
       this.orderId = params['orderId'];
       if (this.orderId) {
@@ -31,33 +44,19 @@ export class ProductListingComponent implements OnInit {
       OUT_FOR_DELIVERY: 4,
       DELIVERED: 5
     };
-    this.productDetails = [{
-      id: 0,
-      privewImages: ['../../../assets/img/coffee-1.jpg'],
-      title: 'Coffee',
-      currentPrice: '180',
-      quantity: 1,
-      isAddedToCart: true
-    }, {
-      id: 1,
-      privewImages: ['../../../assets/img/coffee-2.jpg'],
-      title: 'Coffee',
-      currentPrice: '180',
-      quantity: 2,
-      isAddedToCart: false
-    }, {
-      id: 2,
-      privewImages: ['../../../assets/img/coffee-3.jpg'],
-      title: 'Coffee',
-      currentPrice: '180',
-      quantity: 1,
-      isAddedToCart: true
-    }];
+    this.productDetails = [];
     this.getTotal();
   }
 
   onCartUpdate(item) {
+    if (!item.isAddedToCart) {
+      this.sharedService.cartItems.push(item);
+    } else {
+      this.sharedService.cartItems.splice(this.sharedService.cartItems.indexOf(item), 1);
+    }
     item.isAddedToCart = !item.isAddedToCart;
+
+
     this.getTotal();
   }
 
@@ -71,5 +70,20 @@ export class ProductListingComponent implements OnInit {
   }
   gotoProductDetails(item) {
     this.router.navigate(['/product', item.id]);
+  }
+
+
+  onSuccess(data) {
+    if (data && Array.isArray(data.payload)) {
+      this.productDetails = data.payload;
+    } else {
+      this.handleError(null);
+    }
+
+  }
+
+  handleError(error) {
+    this.message = NETWORK_FAILED;
+    return;
   }
 }

@@ -18,6 +18,7 @@
 .param dd {
     margin: 0;
     vertical-align: baseline;
+    color: red;
 } 
 
 .shopping-cart-wrap .price {

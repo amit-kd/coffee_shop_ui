@@ -1,3 +1,6 @@
+<alert *ngIf="message" [type]="messageType" dismissOnTimeout="5000" dismissible="true">
+  {{message}}
+</alert>
 <div class="card">
   <div class="col-xs-12 col-md-12 form-group text-right submit-cart" *ngIf="!isEditable">
     <ol class="progtrckr" data-progtrckr-steps="4">
@@ -33,15 +36,18 @@
               <a href="javascript:void(0);" (click)="gotoProductDetails(item)">
                 <h6 class="title text-truncate" (click)="gotoProductDetails(item)">{{item.title}}</h6>
               </a>
+              <dl *ngIf="item.stockCount <= item.thresholdStockCount" class="param param-inline small">
+                <dd>Hurry! Only {{item.stockCount>1?item.stockCount +' are': item.stockCount + ' is'}} left!</dd>
+              </dl>
             </figcaption>
           </figure>
         </td>
         <td>
           <select class="form-control" [(ngModel)]="item.quantity" [disabled]="item.isAddedToCart || !isEditable">
             <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
+            <option *ngIf="item.stockCount >=2">2</option>
+            <option *ngIf="item.stockCount >=3">3</option>
+            <option *ngIf="item.stockCount >=4">4</option>
           </select>
         </td>
         <td>
@@ -60,7 +66,7 @@
             × Remove</a>
         </td>
       </tr>
-      <tr>
+      <tr *ngIf="sharedService && sharedService.getUser().isLogged">
         <td colspan="2" class="text-right">
           <span>
             <b>Total:</b>
@@ -74,13 +80,13 @@
       </tr>
     </tbody>
   </table>
-  <div class="container">
+  <div class="container" *ngIf="sharedService && sharedService.getUser().isLogged">
     <form class="row">
       <div class="col-xs-6 col-md-6 form-group">
         <label>Order date &amp; time</label>
         <span>
-          <input type="date" name="orderdate" id="dob" class="order form-control" placeholder="order date" [disabled]="!isEditable">
-          <input type="time" name="ordertime" id="dob" class="order form-control" placeholder="order time" [disabled]="!isEditable">
+          <input type="date" name="orderdate" id="orderdate" class="order form-control" placeholder="order date" [disabled]="!isEditable">
+          <input type="time" name="ordertime" id="ordertime" class="order form-control" placeholder="order time" [disabled]="!isEditable">
         </span>
       </div>
       <div class="col-xs-6 col-md-6 form-group text-right submit-cart" *ngIf="isEditable">

@@ -8,13 +8,15 @@ import { SharedModule } from './shared/shared.module';
 import { HomeModule } from './modules/home/home.module';
 import { AppRoutingModule } from './app-routing/app-routing.module';
 import { FormsModule } from '../../node_modules/@angular/forms';
+import { ProductModule } from './modules/product/product.module';
+import { OrderModule } from './modules/order/order.module';
 
 @NgModule({
   declarations: [
     AppComponent
   ],
   imports: [
-    BrowserModule, FormsModule, AppRoutingModule, AppBootstrapModule, CoreModule, SharedModule, HomeModule
+    BrowserModule, FormsModule, AppRoutingModule, AppBootstrapModule, CoreModule, SharedModule, HomeModule, ProductModule, OrderModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,0 +1,7 @@
+<div [class.loader-hidden]="!show">
+    <div class="loader-overlay">
+        <div>
+            <progressbar class="progress-striped active" max="100" value="100" type="success" *ngIf="show"></progressbar>
+        </div>
+    </div>
+</div>

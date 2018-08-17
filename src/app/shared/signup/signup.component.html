@@ -7,23 +7,34 @@
 <div class="modal-body">
   <div class="row">
     <div class="col-md-12">
-      <form id="login-form" action="https://phpoll.com/login/process" method="post" role="form" style="display: block;">
+      <alert *ngIf="message" [type]="messageType" dismissOnTimeout="5000" dismissible="true">
+        {{message}}
+      </alert>
+      <form id="login-form" role="form" style="display: block;">
         <div class="form-group">
-          <input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="">
+          <input type="text" name="name" id="name" tabindex="1" class="form-control" placeholder="Full name" value="" [(ngModel)]="signUpObj.name"
+            required>
         </div>
         <div class="form-group">
-          <input type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Password">
+          <input type="email" name="email" id="email" tabindex="1" class="form-control" placeholder="Email" value="" [(ngModel)]="signUpObj.email"
+            required>
         </div>
         <div class="form-group">
-          <input type="password" name="confirm_password" id="confirm_password" tabindex="3" class="form-control" placeholder="Confirm Password">
+          <input type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Password" [(ngModel)]="signUpObj.password"
+            required>
         </div>
         <div class="form-group">
-          <input type="date" name="dob" id="dob" tabindex="4" class="form-control" placeholder="DOB">
+          <input type="password" name="confirm_password" id="confirm_password" tabindex="3" class="form-control" placeholder="Confirm Password"
+            [(ngModel)]="signUpObj.confirmPassword" required>
+        </div>
+        <div class="form-group">
+          <input type="date" name="dob" id="dob" tabindex="4" class="form-control" placeholder="DOB" [(ngModel)]="signUpObj.dob" required>
         </div>
         <div class="form-group text-center">
           <div class="row">
             <div class="col-sm-6 col-sm-offset-3">
-              <input type="submit" name="signup-submit" id="signup-submit" tabindex="6" class="form-control btn btn-outline-success" value="Sign up">
+              <input type="submit" name="signup-submit" id="signup-submit" tabindex="6" class="form-control btn btn-outline-success" value="Sign up"
+                (click)="doSignUp();">
             </div>
             <div class="col-sm-12 col-sm-offset-3 text-left">
               <a href="javascript:void(0);" tabindex="5" class="forgot-password" (click)="openLoginModal()">Already a member?</a>

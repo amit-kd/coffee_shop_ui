@@ -20,14 +20,15 @@
           </ul>
           <ul class="navbar-nav">
             <!-- User not logged in -->
-            <li class="nav-item">
+            <li class="nav-item" *ngIf="!sharedService.getUser() || !sharedService.getUser().name">
               <a class="nav-link" role="button" (click)="openLoginModal()">
                 Login / Signup
               </a>
             </li>
             <!-- User logged in -->
-            <li class="nav-item dropdown">
+            <li class="nav-item dropdown" *ngIf="sharedService.getUser() && sharedService.getUser().name">
               <a class="nav-link dropdown-toggle" href="javascript:void(0);" id="navbardrop" data-toggle="dropdown">
+                Hi, {{sharedService.getUser() && sharedService.getUser().name}}
                 <i class="fa fa-user"></i>
               </a>
               <div class="dropdown-menu">
@@ -38,10 +39,10 @@
             </li>
             <!-- Cart -->
             <li class="nav-item">
-              <a class="nav-link shopping-cart" href="javascript:void(0);">
+              <a class="nav-link shopping-cart" href="javascript:void(0);" (click)="gotoCarts()">
                 <span class="fa fa-shopping-cart"></span>
                 <span class="cart-items-count">
-                  <span class=" notification-counter">243</span>
+                  <span class=" notification-counter">{{sharedService && sharedService.cartItems.length}}</span>
                 </span>
               </a>
             </li>
