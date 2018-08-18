@@ -39,9 +39,6 @@ export class OrderHistoryComponent implements OnInit {
   onSuccess(data) {
     if (data && Array.isArray(data.payload)) {
       this.orderDetails = data.payload;
-      this.orderDetails.forEach(order => {
-        order.productNames = order.products.map(prod => prod.title);
-      });
     } else {
       this.handleError(null);
     }

@@ -20,7 +20,9 @@
               <a href="javascript:void(0);" (click)="openOrder(order)">{{order.id}}</a>
             </td>
             <td>
-              {{order.productNames.join()}}
+              <span *ngFor="let prod of order.products;let i = index;">
+                {{prod.title}}({{prod.quantity}}){{i!==order.products.length-1?',':''}}
+              </span>
             </td>
             <td>{{order.date}} &amp; {{order.time}}</td>
             <td>Rs. {{order.total}}</td>

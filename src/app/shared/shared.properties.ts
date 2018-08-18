@@ -11,5 +11,6 @@ export const LIKE_DISABLE = "Please login to like this product!";
 export const REMOVE_FROM_CART = " product(s) is/are removed from cart due to out of stock! ";
 export const REVISE_FROM_CART = " product(s) is/are revised from cart due to less stock! ";
 export const CLEAR_CART = "Your cart got cleared due to loading of previous saved order!"
+export const CLEAR_CART_ORDER = "Your cart is cleared!"
 
 

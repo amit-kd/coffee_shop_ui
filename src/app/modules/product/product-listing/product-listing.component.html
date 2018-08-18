@@ -1,6 +1,9 @@
 <alert *ngIf="message" [type]="messageType" [dismissOnTimeout]="alertDismiss" dismissible="true">
   {{message}}
 </alert>
+<div *ngIf="isOrderDetails || sharedService.getEditedOrder().id">
+  <h4>Order {{orderStatus === 'SAVED'?sharedService.getEditedOrder().id:curOrder.id}}:</h4>
+</div>
 <div class="card">
   <div class="col-xs-12 col-md-12 form-group text-right submit-cart" *ngIf="isOrderDetails || sharedService.getEditedOrder().id">
     <ol class="progtrckr" data-progtrckr-steps="5">
@@ -18,7 +21,7 @@
   <table class="table table-hover shopping-cart-wrap">
     <thead class="text-muted">
       <tr>
-        <th scope="col">Product</th>
+        <th scope="col">Products</th>
         <th scope="col" width="120">Quantity</th>
         <th scope="col" width="120">Price</th>
         <th scope="col" width="200" class="text-right">Action</th>
@@ -86,17 +89,28 @@
   <div *ngIf="sharedService && sharedService.getUser().isLogged">
     <form class="row">
       <div class="col-xs-6 col-md-6 form-group">
-        <label>Order date &amp; time</label>
-        <span>
-          <input type="date" name="orderdate" id="orderdate" class="order form-control" placeholder="order date" [disabled]="!isEditable">
-          <input type="time" name="ordertime" id="ordertime" class="order form-control" placeholder="order time" [disabled]="!isEditable">
+        <label *ngIf="isEditable">Order date &amp; time</label>
+        <span *ngIf="isEditable">
+          <input type="time" name="ordertime" id="ordertime" class="order form-control" placeholder="order time" [ngModel]="sharedService.getEditedOrder().time"
+            (ngModelChange)="sharedService.getEditedOrder().time = $event" min="08:00" max="20:00">
+          <input type="date" name="orderdate" id="orderdate" class="order form-control" placeholder="order date" [ngModel]="sharedService.getEditedOrder().date||curOrder.date | date:'yyyy-MM-dd'"
+            (ngModelChange)="sharedService.getEditedOrder().date = $event" [min]="minDate" [max]="maxDate">
+        </span>
+        <span *ngIf="!isEditable">
+          <dl class="param param-inline">
+            <dt>Ordered Date &amp; TIme: </dt>
+            <dd> {{curOrder.time}}, {{curOrder.date}}</dd>
+          </dl>
         </span>
       </div>
       <div class="col-xs-6 col-md-6 form-group text-right submit-cart" *ngIf="isEditable">
-        <button class="btn btn-outline-success">
+        <button class="btn btn-outline-danger" (click)="clearCart();" [disabled]="sharedService.getCartSize()===0">
+          <i class="fa fa-times-circle"></i>&nbsp;Clear Cart
+        </button>
+        <button class="btn btn-outline-success" (click)="postOrder(false);" [disabled]="sharedService.getCartSize()===0">
           <i class="fa fa-save"></i>&nbsp;Save
         </button>
-        <button class="btn btn-outline-success">
+        <button class="btn btn-outline-success" (click)="postOrder(true);" [disabled]="sharedService.getCartSize()===0">
           <i class="fa fa-check-circle"></i>&nbsp;Submit</button>
       </div>
     </form>

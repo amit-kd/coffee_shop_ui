@@ -12,7 +12,8 @@ export const environment = {
   loginUrl: baseUrl + '/user/login',
   signupUrl: baseUrl + '/register',
   productUrl: baseUrl + '/products',
-  orderUrl: baseUrl + '/user/orders'
+  orderUrl: baseUrl + '/user/orders',
+  updateOrderUrl: baseUrl + '/user/order'
 };
 
 /*

@@ -104,6 +104,10 @@ export class SharedService {
     this.cartItems = localStorage.getItem('cartItems') ? JSON.parse(localStorage.getItem('cartItems')) : [];
   }
 
+  getCart() {
+    return this.cartItems;
+  }
+
   setEditedOrder(order) {
     this.editedOrder = order;
     localStorage.setItem("editedOrder", JSON.stringify(order));
@@ -118,8 +122,23 @@ export class SharedService {
     this.editedOrder = new OrderDTO;
   }
 
+  clearUser() {
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("userName");
+    this.user = new UserDTO();
+  }
+
   refreshEditedOrder() {
     this.editedOrder = localStorage.getItem('editedOrder') ? JSON.parse(localStorage.getItem('editedOrder')) : new OrderDTO();
+  }
+
+  signOut() {
+    this.clearEditedOrder();
+    this.clearCart();
+    this.clearUser();
+    localStorage.clear();
+
   }
 
 }

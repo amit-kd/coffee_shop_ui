@@ -3,8 +3,11 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { SharedService } from '../../../shared/shared.service';
 import { SignUPDTO } from '../../../models/signup.dto';
 import { ProductService } from '../product.service';
-import { NETWORK_FAILED, REMOVE_FROM_CART, REVISE_FROM_CART, CLEAR_CART } from '../../../shared/shared.properties';
+import { NETWORK_FAILED, REMOVE_FROM_CART, REVISE_FROM_CART, CLEAR_CART, CLEAR_CART_ORDER } from '../../../shared/shared.properties';
 import { ProductDTO } from '../../../models/product.dto';
+import { THIS_EXPR } from '../../../../../node_modules/@angular/compiler/src/output/output_ast';
+import { OrderDTO } from '../../../models/order.dto';
+import { Utility } from '../../../core/Utils/utility';
 
 @Component({
   selector: 'app-product-listing',
@@ -23,12 +26,21 @@ export class ProductListingComponent implements OnInit, OnDestroy {
   public messageType: String = "danger";
   public isOrderDetails = false;
   public alertDismiss: number = 5000;
+  public curOrder: OrderDTO;
+  public minDate: String;
+  public maxDate: String;
 
   constructor(private router: Router, private route: ActivatedRoute, public sharedService: SharedService, private productService: ProductService) {
     this.message = null;
   }
 
   ngOnInit() {
+    this.minDate = Utility.getDateInFormat(null);
+    //Set 3 year till order can be created
+    this.maxDate = Utility.getDateInFormat(3);
+    this.curOrder = new OrderDTO();
+    this.sharedService.getEditedOrder().date = this.minDate;
+    this.sharedService.getEditedOrder().time = Utility.getDateInFormat(null, true);
     this.orderStatuses = {
       SAVED: 1,
       CONFIRMING: 2,
@@ -95,7 +107,16 @@ export class ProductListingComponent implements OnInit, OnDestroy {
       this.productDetails = data.payload[0].products;
       this.orderStatus = data.payload[0].status;
       this.processOrder(data.payload[0]);
-      this.getTotal();
+    } else {
+      this.handleError(null);
+    }
+  }
+
+  onSuccessPostOrder(data) {
+    if (data && Array.isArray(data.payload) && data.payload[0]) {
+      this.sharedService.clearCart();
+      this.sharedService.clearEditedOrder();
+      this.router.navigate(['/orders']);
     } else {
       this.handleError(null);
     }
@@ -118,6 +139,7 @@ export class ProductListingComponent implements OnInit, OnDestroy {
         }
         //for lesser stock
         if (prod.stockCount < addedProd[0].quantity) {
+          debugger;
           reviseCartItem.push(addedProd[0].title);
           prod.quantity = addedProd[0].quantity - prod.stockCount;
           this.sharedService.removeFromCart(prod);
@@ -138,6 +160,7 @@ export class ProductListingComponent implements OnInit, OnDestroy {
       finalMsg += reviseCartItem.join() + REVISE_FROM_CART;
     }
     if (finalMsg) {
+      this.messageType = "danger";
       this.message = finalMsg;
       this.alertDismiss = 0;
     }
@@ -146,10 +169,15 @@ export class ProductListingComponent implements OnInit, OnDestroy {
   processOrder(order) {
     if (this.orderStatus === 'SAVED') {
       this.isEditable = true;
+      this.curOrder = new OrderDTO();
       this.sharedService.setEditedOrder(order);
       this.sharedService.clearCart();
+      this.messageType = "danger";
       this.message = CLEAR_CART;
       this.alertDismiss = 0;
+    } else {
+      this.total = order.total;
+      this.curOrder = order;
     }
     this.productDetails.forEach(prod => {
       //To not show any out of stock / less stock message
@@ -161,16 +189,43 @@ export class ProductListingComponent implements OnInit, OnDestroy {
         this.sharedService.addToCart(prod);
         prod.isAddedToCart = true;
       }
-
     });
-
+    if (this.orderStatus === 'SAVED') {
+      this.getTotal();
+    }
   }
+
+  postOrder(isSubmit) {
+    let order = this.sharedService.getEditedOrder();
+    if (this.sharedService.getEditedOrder().id) {
+      this.productService.updateOrder(new OrderDTO(order.id.toString(), order.date.toString(), order.time.toString(), this.sharedService.getCart(), "SAVED", this.total.toString(), isSubmit)).subscribe((data) => this.onSuccessPostOrder(data),
+        (error) => this.handleError(error));
+      return;
+    }
+    this.productService.postOrder(new OrderDTO(null, order.date.toString(), order.time.toString(), this.sharedService.getCart(), "SAVED", this.total.toString(), isSubmit)).subscribe((data) => this.onSuccessPostOrder(data),
+      (error) => this.handleError(error));
+  }
+
+  clearCart() {
+    this.curOrder = new OrderDTO();
+    this.sharedService.clearCart();
+    this.sharedService.clearEditedOrder();
+    this.productDetails.forEach(prod => prod.isAddedToCart = false);
+    this.message = CLEAR_CART_ORDER;
+    this.isOrderDetails = false;
+    this.messageType = "success";
+    this.alertDismiss = 5000;
+  }
+
 
   handleError(error) {
     this.alertDismiss = 5000;
+    this.messageType = "danger";
     this.message = NETWORK_FAILED;
     return;
   }
+
+
 
   ngOnDestroy() {
     this.sub = null;

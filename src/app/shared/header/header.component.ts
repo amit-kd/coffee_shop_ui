@@ -35,4 +35,9 @@ export class HeaderComponent implements OnInit {
     }
   }
 
+  signOut() {
+    this.sharedService.signOut();
+    this.router.navigate(["/home"]);
+  }
+
 }

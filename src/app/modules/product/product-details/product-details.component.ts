@@ -42,7 +42,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
       if (!this.sharedService.getUser().isLogged) {
         this.likeDisableMessage = LIKE_DISABLE;
       }
-      this.processProduct();
+      //this.processProduct();
     } else {
       this.handleError(null);
     }
@@ -70,6 +70,8 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   likeProduct() {
     this.productDetails.isLiked = !this.productDetails.isLiked;
     //do service call
+    this.productService.setLike(this.productDetails.id).subscribe((data) => this.onSuccessOrder(data),
+      (error) => this.handleError(error));
   }
 
   processProduct() {
@@ -78,6 +80,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
     let finalMsg = "";
     const prod = this.productDetails;
     let addedProd = this.sharedService.filterCart(prod.id);
+    debugger;
     if (addedProd && addedProd[0]) {
       //out of stock
       if (prod.stockCount === 0) {
