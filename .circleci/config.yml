@@ -1,0 +1,176 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/repo
+    # The primary container is an instance of the first list image listed. Your build commands run in this container.
+    docker:
+      - image: circleci/node:7.10    
+    steps:
+      - checkout     
+      - restore_cache:
+          keys: 
+            - dependency-cache-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+      - run:
+          name: Install npm
+          command: npm install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+      - run:
+          name: Run lint
+          command: './node_modules/.bin/ng lint --format pmd > lint-result.xml'
+      - store_artifacts:
+          path: lint-result.xml
+          prefix: lint      
+      - run: 
+          name: Build the project
+          command: npm run build
+      - save_cache:
+          key: v1-repo-{{ .Environment.CIRCLE_SHA1 }}
+          paths:
+            - ~/repo
+  test:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/node:7.10
+    steps:
+      - restore_cache:
+          keys:
+            - v1-repo-{{ .Environment.CIRCLE_SHA1 }}
+      - restore_cache:
+          keys: 
+            - dependency-cache-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-            
+      - run:
+          name: Test
+          command: npm test
+  dev_code_coverage:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/node:7.10
+    steps:
+      - checkout
+      - restore_cache:
+          keys: 
+            - dependency-cache-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-     
+      - run:
+          name: Generate code coverage
+          command: './node_modules/.bin/ng test --code-coverage --reporters=coverage-istanbul'
+      - store_artifacts:
+          path: ~/repo/coverage
+          
+  dev_deploy:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/node:7.10
+    steps:
+      - restore_cache:
+          keys:
+            - v1-repo-{{ .Environment.CIRCLE_SHA1 }}
+      - restore_cache:
+          keys: 
+            - dependency-cache-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+      - deploy:
+         name: Deploy DEV to Firebase
+         command: |
+           ./node_modules/.bin/firebase deploy --token="1/vuajbPVb5eUGMEyZIcw0TSJAEODYV0paZDYlCjiPQQ2NzEkT6xXtCc6e53Y4jhE_" --project coffee-shop-e3bbd --non-interactive
+  sit_deploy:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/node:7.10
+    steps:
+      - restore_cache:
+          keys:
+            - v1-repo-{{ .Environment.CIRCLE_SHA1 }}
+      - restore_cache:
+          keys: 
+            - dependency-cache-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+      - deploy:
+         name: Deploy SIT to Firebase
+         command: |
+           ./node_modules/.bin/firebase deploy --token="1/L8xSwNKbz6a4jTZjUaCpbihV-nNHt74ZKMggJ3W9tbCBmsj0cvL7N5wPQMbIqgmk" --project hackathonfirebase --non-interactive
+  prod_deploy:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/node:7.10
+    steps:
+      - restore_cache:
+          keys:
+            - v1-repo-{{ .Environment.CIRCLE_SHA1 }}
+      - restore_cache:
+          keys: 
+            - dependency-cache-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-      
+      - deploy:
+         name: Deploy Master to Firebase
+         command: |
+           ./node_modules/.bin/firebase deploy --token="1/L8xSwNKbz6a4jTZjUaCpbihV-nNHt74ZKMggJ3W9tbCBmsj0cvL7N5wPQMbIqgmk" --project hackathonfirebase --non-interactive
+
+workflows:
+  version: 2
+  dev_build_and_test:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only: develop
+      - test:
+          requires:
+            - build
+          filters:
+            branches:
+              only: develop      
+      - dev_deploy:
+          type: approval
+          requires:
+            - test
+          filters:
+            branches:
+              only: develop
+  sit_build_and_test:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only: sit
+      - test:
+          requires:
+            - build
+          filters:
+            branches:
+              only: sit
+      - sit_deploy:          
+          requires:
+            - test
+          filters:
+            branches:
+              only: sit
+  prod_build_and_test:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only: master
+      - test:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
+      - prod_deploy:          
+          requires:
+            - test
+          filters:
+            branches:
+              only: master
