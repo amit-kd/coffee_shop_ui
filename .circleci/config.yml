@@ -98,7 +98,7 @@ jobs:
       - deploy:
          name: Deploy SIT to Firebase
          command: |
-           ./node_modules/.bin/firebase deploy --token="1/L8xSwNKbz6a4jTZjUaCpbihV-nNHt74ZKMggJ3W9tbCBmsj0cvL7N5wPQMbIqgmk" --project hackathonfirebase --non-interactive
+           ./node_modules/.bin/firebase deploy --token="1/vuajbPVb5eUGMEyZIcw0TSJAEODYV0paZDYlCjiPQQ2NzEkT6xXtCc6e53Y4jhE_" --project coffee-shop-e3bbd --non-interactive
   prod_deploy:
     working_directory: ~/repo
     docker:
@@ -115,7 +115,7 @@ jobs:
       - deploy:
          name: Deploy Master to Firebase
          command: |
-           ./node_modules/.bin/firebase deploy --token="1/L8xSwNKbz6a4jTZjUaCpbihV-nNHt74ZKMggJ3W9tbCBmsj0cvL7N5wPQMbIqgmk" --project hackathonfirebase --non-interactive
+           ./node_modules/.bin/firebase deploy --token="1/vuajbPVb5eUGMEyZIcw0TSJAEODYV0paZDYlCjiPQQ2NzEkT6xXtCc6e53Y4jhE_" --project coffee-shop-e3bbd --non-interactive
 
 workflows:
   version: 2
