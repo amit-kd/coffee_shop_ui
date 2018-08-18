@@ -18,16 +18,10 @@ jobs:
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
-            - node_modules
-      - run:
-          name: Run lint
-          command: './node_modules/.bin/ng lint --format pmd > lint-result.xml'
-      - store_artifacts:
-          path: lint-result.xml
-          prefix: lint      
+            - node_modules  
       - run: 
           name: Build the project
-          command: npm run build
+          command: npm build
       - save_cache:
           key: v1-repo-{{ .Environment.CIRCLE_SHA1 }}
           paths:
@@ -161,16 +155,10 @@ workflows:
       - build:
           filters:
             branches:
-              only: master
-      - test:
+              only: master      
+      - prod_deploy:
           requires:
             - build
-          filters:
-            branches:
-              only: master
-      - prod_deploy:          
-          requires:
-            - test
           filters:
             branches:
               only: master
