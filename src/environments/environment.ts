@@ -2,7 +2,7 @@
 // `ng build ---prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-const host = 'http://localhost:8080';
+const host = 'https://i-coffee-shop.herokuapp.com';
 const baseUrl = host + '/coffeeshop/v1';
 const clientId = 'testjwtclientid';
 const clientSecret = 'XY7kmzoNzl100';
