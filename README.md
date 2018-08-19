@@ -4,8 +4,9 @@ This project contain all ui logic for coffee shop. This connects to backend code
 # How to Run
 1) Install Node
 2) Install angular/cli
-3) Run the project using "ng serve"
-4) Build "npm run build"  (for dev), "npm run build --prod" (for prod)
+3) Do "npm install" to install dependencies in the main folder
+4) Run the project using "ng serve"
+5) Build "npm run build"  (for dev), "npm run build --prod" (for prod)
 
 # How to deploy
 1) Push your chnages to master branch
