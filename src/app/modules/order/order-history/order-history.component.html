@@ -3,6 +3,18 @@
 </alert>
 <div class="container">
   <div class="row">
+    <div class="col-sm-6">
+      <div id="imaginary_container">
+        <div class="input-group stylish-input-group">
+          <input type="text" class="form-control" placeholder="Search" [(ngModel)]="searchOrderId">
+          <span class="input-group-addon">
+            <button type="submit" disabled="disabled">
+              <span class="fa fa-search"></span>
+            </button>
+          </span>
+        </div>
+      </div>
+    </div>
     <div class="table-responsive">
       <table class="table table-bordered">
         <thead>
@@ -15,7 +27,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let order of orderDetails">
+          <tr *ngFor="let order of orderDetails | orderFilter:searchOrderId">
             <td>
               <a href="javascript:void(0);" (click)="openOrder(order)">{{order.id}}</a>
             </td>

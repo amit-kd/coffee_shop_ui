@@ -8,6 +8,7 @@ import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '../../../node_modules/@angular/router';
+import { OrderFilterPipe } from './order-filter.pipe';
 
 @NgModule({
   imports: [

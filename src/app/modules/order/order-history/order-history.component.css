@@ -1,1 +1,25 @@
 .table-responsive{margin-top:25px;}
+
+#imaginary_container{
+    margin-top:20px; /* Don't copy this */
+}
+.stylish-input-group .input-group-addon{
+    background: white !important; 
+}
+.stylish-input-group .form-control{	
+    border-right:0; 
+	box-shadow:0 0 0; 
+    border-color:#ccc;
+    border-radius: 5px 0 0 5px;
+}
+.input-group-addon{    
+    border: 1px solid;
+    border-left: 0;
+    border-color: #ccc;
+    border-radius: 0 5px 5px 0;
+}
+.stylish-input-group button{
+    border:0;
+    background:transparent;
+    vertical-align: middle;
+}
